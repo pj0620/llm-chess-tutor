@@ -67,16 +67,32 @@ Game::Game(float cellSize, float xOffset, float yOffset)
 void Game::resetGameBoard() {
   playerColor = (PieceColor) dist(gen);
   PieceColor opponentColor = (PieceColor) (1 - playerColor);
+
+  static std::array<Piece, 3> piecesFromCenter = {BISHOP, KNIGHT, ROOK};
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
 
       ColoredPiece newPiece = {EMPTY, BLACK};
 
-      if (j == 1) {
-        newPiece = {PAWN, opponentColor};
+      if (j <= 1) {
+        newPiece.color = opponentColor;
+      } else {
+        newPiece.color = playerColor;
       }
-      else if (j == 6) {
-        newPiece = {PAWN, playerColor};
+
+      if (j == 1 || j == 6) {
+        newPiece.piece = PAWN;
+      }
+
+      if (j == 0 || j == 7) {
+        int centerDist = i <= 3 ? abs(i - 4) - 1 : i - 4;
+        if (centerDist > 0) {
+          newPiece.piece = piecesFromCenter[centerDist - 1];
+        } else if ((j == 0 && i == 3) || (j == 7 && i == 4))  {
+          newPiece.piece = QUEEN;
+        } else if ((j == 0 && i == 4) || (j == 7 && i == 3)) {
+          newPiece.piece = KING;
+        }
       }
 
       if (newPiece.piece != EMPTY) {
@@ -87,6 +103,8 @@ void Game::resetGameBoard() {
         pieceSprite.setScale(newScale);
         pieceSprite.setPosition(sf::Vector2f(xOffset + i * cellSize, yOffset + j * cellSize));
         pieceSprites.push_back(pieceSprite);
+
+        boardState[i][j] = newPiece;
       }
     }
   }
