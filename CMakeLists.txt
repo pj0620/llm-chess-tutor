@@ -12,6 +12,16 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(main src/main.cpp)
-target_compile_features(main PRIVATE cxx_std_17)
+# Ensure assets/ exists in the source directory
+if(EXISTS ${CMAKE_SOURCE_DIR}/assets)
+    # Copy the entire assets/ directory to the build directory
+    file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR})
+endif()
+
+# Automatically find all .cpp files in src/
+file(GLOB SOURCES src/*.cpp)
+
+add_executable(main ${SOURCES})
+
+target_compile_features(main PRIVATE cxx_std_20)
 target_link_libraries(main PRIVATE SFML::Graphics)
