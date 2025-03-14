@@ -3,9 +3,15 @@
 #include "string"
 #include <format>
 #include <iostream>
+#include <random>
 
 using std::string;
 using std::format;
+
+// Define static members outside the class
+std::random_device Game::rd;
+std::mt19937 Game::gen(Game::rd());  // Seed generator once
+std::uniform_int_distribution<int> Game::dist(0, 1);  // Only needs to be defined once
 
 Game::Game(float cellSize, float xOffset, float yOffset)
     : cellSize(cellSize), xOffset(xOffset), yOffset(yOffset) {
@@ -59,12 +65,15 @@ Game::Game(float cellSize, float xOffset, float yOffset)
 
 //TODO: will need player's current color
 void Game::resetGameBoard() {
+  playerColor = (PieceColor) dist(gen);
+  PieceColor opponentColor = (PieceColor) (1 - playerColor);
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
 
       ColoredPiece newPiece = {EMPTY, BLACK};
+
       if (j == 1) {
-        newPiece = {PAWN, BLACK};
+        newPiece = {PAWN, playerColor};
       }
 
       if (newPiece.piece != EMPTY) {
