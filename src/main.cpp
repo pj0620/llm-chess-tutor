@@ -4,7 +4,7 @@
 #include "pieces.h"
 
 int main() {
-  auto window = sf::RenderWindow(sf::VideoMode({700u, 400u}), "CMake SFML Project");
+  auto window = sf::RenderWindow(sf::VideoMode({700u, 400u}), "LLM Chess Tutor");
   window.setFramerateLimit(144);
 
   Game game(50, 0, 0);

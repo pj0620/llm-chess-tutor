@@ -73,6 +73,9 @@ void Game::resetGameBoard() {
       ColoredPiece newPiece = {EMPTY, BLACK};
 
       if (j == 1) {
+        newPiece = {PAWN, opponentColor};
+      }
+      else if (j == 6) {
         newPiece = {PAWN, playerColor};
       }
 
