@@ -10,9 +10,11 @@ using std::vector;
 
 class Game {
   private:
-    float cellSize;
+    float cellSizeX;
+    float cellSizeY;
     float xOffset;
     float yOffset;
+    float perspectivePointH;
     std::vector<std::vector<ColoredPiece>> boardState;
     PieceColor playerColor;
 
@@ -20,12 +22,14 @@ class Game {
     std::vector<std::vector<sf::Texture>> pieceTextures;
 
     // Shapes/Sprite
-    vector<sf::RectangleShape> gridCells;
-    std::vector<sf::Sprite> pieceSprites;
+    vector<sf::ConvexShape> gridCells;
+    std::array<std::vector<sf::Sprite>, 8> pieceSprites;
 
     // Methods  
     void drawBoard(sf::RenderWindow& window);
     void resetGameBoard();
+    sf::Vector2f getPoint(float i, float j);
+    float getPerspectiveWidth(float j);
 
     // RNG
     static std::random_device rd;
@@ -33,6 +37,6 @@ class Game {
     static std::uniform_int_distribution<int> dist;
     
   public:
-    Game(float cellSize = 10, float xOffset = 0, float yOffset = 0);
+    Game(float cellSizeX = 10, float cellSizeY = 10, float xOffset = 0, float yOffset = 0, float perspectivePointH=50);
     void draw(sf::RenderWindow& window);
 };
